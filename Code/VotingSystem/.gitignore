@@ -1,0 +1,8 @@
+.vs
+*.user
+bin
+obj
+appsettings.Production.json
+appsettings.Development.json
+*.log
+*.pubxml
