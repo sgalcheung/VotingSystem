@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using VotingSystem.Web.Entities;
 
 namespace VotingSystem.Web.Data
 {
@@ -12,5 +13,7 @@ namespace VotingSystem.Web.Data
             : base(options)
         {
         }
+
+        public DbSet<Vote> Votes { get; set; }
     }
 }
