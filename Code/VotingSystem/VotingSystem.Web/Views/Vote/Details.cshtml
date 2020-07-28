@@ -1,0 +1,27 @@
+﻿@model VoteDetailViewModel
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+
+<h2>@Model.Title</h2>
+<form asp-action="DeletePost" asp-route-id="@Model.Id">
+    <p>
+        @*@if (Model.CanEditRecipe)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        }*@
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <button class="btn btn-danger">Delete</button>
+    </p>
+</form>
+<p>@Model.Remaining</p>
+
+<dl>
+    @foreach (var item in Model.VoteItems)
+    {
+        <dt>@item.ItemName</dt>
+        <dd>@item.IsMultiple</dd>
+    }
+</dl>
