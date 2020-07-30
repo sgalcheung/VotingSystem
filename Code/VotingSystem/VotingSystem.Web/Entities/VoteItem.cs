@@ -10,6 +10,5 @@ namespace VotingSystem.Web.Entities
         public Guid Id { get; set; }
         public Guid VoteId { get; set; }
         public string ItemName { get; set; }
-        public bool IsMultiple { get; set; }
     }
 }
