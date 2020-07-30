@@ -46,7 +46,7 @@ namespace VotingSystem.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     var user = await GetCurrentUserAsync();
-                    var id = _voteService.CreateVote(command, user.Id);
+                    var id = _voteService.CreateVote(command, /*user.Id*/"1");
                     return RedirectToAction(nameof(Details), new { id = id });
                 }
             }
@@ -57,8 +57,6 @@ namespace VotingSystem.Web.Controllers
 
             return View(command);
         }
-
-        private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);
 
         public IActionResult Edit()
         {
@@ -83,5 +81,7 @@ namespace VotingSystem.Web.Controllers
         {
             throw new NotImplementedException();
         }
+
+        private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);
     }
 }

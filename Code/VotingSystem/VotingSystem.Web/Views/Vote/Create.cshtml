@@ -16,20 +16,19 @@
             
             <partial name="_EditVotePartial" />
             
+            <div class="option1">
+                <div class="input-group">
+                    <span class="input-group-addon">选项 1</span>
+                    <input name="ItemName" class="form-control" id="option1" type="text">
+                </div>
+            </div>
+            <br>
             @for (int i = 0; i < Model.VoteItems.Count; i++)
             {
                 <div class="form-group">
                     <label asp-for="VoteItems[i].ItemName" class="control-label"></label>
                     <input asp-for="VoteItems[i].ItemName" class="form-control" />
                     <span asp-validation-for="VoteItems[i].ItemName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="VoteItems[i].IsMultiple" class="control-label"></label>
-                    <input asp-for="VoteItems[i].IsMultiple" class="form-control" />
-                    <span asp-validation-for="VoteItems[i].IsMultiple" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
                 </div>
             }
             

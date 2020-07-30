@@ -71,8 +71,7 @@ namespace VotingSystem.Web
                     VoteItems = x.VoteItems
                         .Select(item => new VoteDetailViewModel.Item
                         {
-                            ItemName = item.ItemName,
-                            IsMultiple = item.IsMultiple
+                            ItemName = item.ItemName
                         })
                 })
                 .SingleOrDefault();

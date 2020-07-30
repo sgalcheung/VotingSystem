@@ -14,8 +14,11 @@ namespace VotingSystem.Web.Models
         {
             return new Vote
             {
+                Id = Guid.NewGuid(),
                 Title = Title,
+                CreateTime = CreateTime,
                 Deadline = Deadline,
+                IsMultiple = IsMultiple,
                 VoteItems = VoteItems?.Select(x => x.ToVoteItem()).ToList(),
                 CreatedById = createById
             };

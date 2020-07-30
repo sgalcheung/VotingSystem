@@ -6,7 +6,17 @@
     <span asp-validation-for="Title" class="text-danger"></span>
 </div>
 <div class="form-group">
+    <label asp-for="CreateTime" class="control-label"></label>
+    <input asp-for="CreateTime" class="form-control" />
+    <span asp-validation-for="CreateTime" class="text-danger"></span>
+</div>
+<div class="form-group">
     <label asp-for="Deadline" class="control-label"></label>
     <input asp-for="Deadline" class="form-control" />
     <span asp-validation-for="Deadline" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="IsMultiple" class="control-label"></label>
+    <input asp-for="IsMultiple" />
+    <span asp-validation-for="IsMultiple" class="text-danger"></span>
 </div>

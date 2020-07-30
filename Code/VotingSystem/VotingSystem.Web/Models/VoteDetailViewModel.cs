@@ -16,7 +16,6 @@ namespace VotingSystem.Web.Models
         public class Item
         {
             public string ItemName { get; set; }
-            public bool IsMultiple { get; set; }
         }
     }
 }

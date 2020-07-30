@@ -10,14 +10,12 @@ namespace VotingSystem.Web.Models
     {
         public string ItemName { get; set; }
 
-        public bool IsMultiple { get; set; }
-
         public VoteItem ToVoteItem()
         {
             return new VoteItem
             {
-                ItemName = ItemName,
-                IsMultiple = IsMultiple
+                Id = Guid.NewGuid(),
+                ItemName = ItemName
             };
         }
     }
