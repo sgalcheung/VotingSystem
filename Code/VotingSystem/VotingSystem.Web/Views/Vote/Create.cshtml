@@ -13,28 +13,37 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
             <partial name="_EditVotePartial" />
-            
-            <div class="option1">
-                <div class="input-group">
-                    <span class="input-group-addon">选项 1</span>
-                    <input name="ItemName" class="form-control" id="option1" type="text">
-                </div>
-            </div>
+
             <br>
-            @for (int i = 0; i < Model.VoteItems.Count; i++)
-            {
-                <div class="form-group">
-                    <label asp-for="VoteItems[i].ItemName" class="control-label"></label>
-                    <input asp-for="VoteItems[i].ItemName" class="form-control" />
-                    <span asp-validation-for="VoteItems[i].ItemName" class="text-danger"></span>
-                </div>
-            }
-            
+            <div id="VoteItems">
+                <div id="init-count" data-value="@(Model.VoteItems.Count)"></div>
+                @for (int i = 0; i < Model.VoteItems.Count; i++)
+                {
+                    var rowNo = i + 1;
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon@(rowNo)">options @(rowNo)</span>
+                        </div>
+                        <input type="text" asp-for="VoteItems[i].ItemName" class="form-control" id="VoteItems_@(rowNo)_ItemName" aria-describedby="basic-addon@(rowNo)">
+                        <span asp-validation-for="VoteItems[i].ItemName" class="text-danger"></span>
+                        @if(i == 2)
+                        {
+                            <div class="cls"></div>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary remove remove@(rowNo)" type="button" id="button-addon3">Remove</button>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+
             <div class="form-group">
-                <button type="button" class="btn btn-success">Add Item</button>
-                <button type="submit" class="btn btn-primary">Create</button>
+                <div class="col-md-10 offset-md-2">
+                    <button type="button" class="btn btn-success" id="addItem">Add Item</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
             </div>
         </form>
     </div>
@@ -46,4 +55,37 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        var optionCount = $("#init-count").attr("data-value");
+        var voteItems = $("#VoteItems");
+        $("#addItem").click(function () {
+            $(".remove" + optionCount).parent().remove(); // remove previous delete button
+            ++optionCount;
+            var template =
+                '<div class="input-group mb-3">' +
+                '<div class="input-group-prepend">' +
+                '<span class="input-group-text" id="basic-addon' + optionCount + '">options ' + optionCount + '</span>' +
+                '</div>' +
+                '<input type="text" asp-for="VoteItems[' + optionCount + '].ItemName" class="form-control" id="VoteItems_' + optionCount + '_ItemName" aria-describedby="basic-addon' + optionCount + '">' +
+                '<span asp-validation-for="VoteItems[' + optionCount + '].ItemName" class="text-danger"></span>' +
+                '<div class="cls"></div>' +
+                '<div class="input-group-prepend">' +
+                '<button class="btn btn-outline-secondary remove remove' + optionCount + '" type="button" id="button-addon' + optionCount + '">Remove</button>' +
+                '</div>' +
+                '</div>';
+            voteItems.append(template);
+        });
+
+
+        voteItems.on("click",
+            ".remove", function () {
+                $(".remove" + optionCount).parent().parent().remove();
+                optionCount--;
+                var removeBtn =
+                    '<div class="input-group-prepend">' +
+                    '<button class="btn btn-outline-secondary remove remove' + optionCount + '" type="button" id="button-addon' + optionCount + '">Remove</button>' +
+                    '</div>';
+                $(".cls").after(removeBtn); // add previous delete button
+            });
+    </script>
 }
