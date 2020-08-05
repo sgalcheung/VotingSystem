@@ -85,7 +85,7 @@
                     '<div class="input-group-prepend">' +
                     '<button class="btn btn-outline-secondary remove remove' + optionCount + '" type="button" id="button-addon' + optionCount + '">Remove</button>' +
                     '</div>';
-                $(".cls").after(removeBtn); // add previous delete button
+                $(".cls").last().after(removeBtn); // add previous delete button
             });
     </script>
 }
