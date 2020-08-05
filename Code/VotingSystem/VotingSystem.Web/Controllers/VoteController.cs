@@ -33,6 +33,20 @@ namespace VotingSystem.Web.Controllers
             return View(models);
         }
 
+        public IActionResult Details(Guid id)
+        {
+            var model = _voteService.GetVoteDetail(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            //var recipe = _voteService.GetVote(id);
+
+
+            return View(model);
+        }
+
         public IActionResult Create()
         {
             return View(new CreateVoteCommand());
@@ -58,28 +72,59 @@ namespace VotingSystem.Web.Controllers
             return View(command);
         }
 
-        public IActionResult Edit()
+        public IActionResult Edit(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            //var vote = _voteService.GetVote(id);
 
-        public IActionResult Details(Guid id)
-        {
-            var model = _voteService.GetVoteDetail(id);
+            var model = _voteService.GetVoteForUpdate(id);
+
             if (model == null)
             {
                 return NotFound();
             }
 
-            //var recipe = _voteService.GetVote(id);
-
-
             return View(model);
         }
 
-        public IActionResult Delete()
+        [HttpPost]
+        public IActionResult Edit(UpdateVoteCommand command)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _voteService.UpdateVote(command);
+                    return RedirectToAction(nameof(Details), new { id = command.Id });
+                }
+            }
+            catch (Exception)
+            {
+                // Add a model-level error by using an empty string key
+                ModelState.AddModelError(string.Empty, "An error occured saving the recipe");
+            }
+
+            // If we got to here, something went wrong
+            return View(command);
+        }
+
+        public IActionResult Delete(Guid id)
+        {
+            var vote = _voteService.GetVote(id);
+
+            if (vote == null)
+            {
+                return NotFound();
+            }
+
+            return View(vote);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(Guid id)
+        {
+            _voteService.DeleteVote(id);
+
+            return RedirectToAction(nameof(Index));
         }
 
         private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);

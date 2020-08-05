@@ -76,5 +76,35 @@ namespace VotingSystem.Web
                 })
                 .SingleOrDefault();
         }
+
+        public UpdateVoteCommand GetVoteForUpdate(Guid id)
+        {
+            return _context.Votes
+                .Where(x => x.Id == id)
+                .Select(x => new UpdateVoteCommand
+                {
+                    Title = x.Title,
+                    Deadline = x.Deadline,
+                    IsMultiple = x.IsMultiple
+                })
+                .SingleOrDefault();
+        }
+
+        public void UpdateVote(UpdateVoteCommand command)
+        {
+            var vote = _context.Votes.Find(command.Id);
+            if (vote == null) throw new Exception("Unable to find the vote");
+
+            command.UpdateVote(vote);
+            _context.SaveChanges();
+        }
+
+        public void DeleteVote(Guid id)
+        {
+            var vote = _context.Votes.Find(id);
+
+            _context.Votes.Remove(vote);
+            _context.SaveChanges();
+        }
     } 
 }
