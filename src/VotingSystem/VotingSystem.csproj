@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>aspnet-VotingSystem.Web-952D0F35-EC98-4E17-9828-7C5C8AF60AA2</UserSecretsId>
+    <UserSecretsId>aspnet-VotingSystem-952D0F35-EC98-4E17-9828-7C5C8AF60AA2</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
