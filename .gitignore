@@ -6,3 +6,4 @@ appsettings.Production.json
 appsettings.Development.json
 *.log
 *.pubxml
+wwwroot/lib
