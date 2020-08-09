@@ -1,0 +1,35 @@
+﻿@model VotingSystem.Models.UpdateVoteCommand
+
+@{
+    ViewBag.Title = "Edit Vote";
+}
+
+<h1>Edit</h1>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <partial name="_EditVotePartial" />
+
+
+            <div class="form-group">
+                <div class="col-md-10 offset-md-2">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
