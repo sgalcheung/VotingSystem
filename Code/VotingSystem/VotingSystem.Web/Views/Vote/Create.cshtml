@@ -28,7 +28,7 @@
                         </div>
                         <input type="text" asp-for="VoteItems[i].ItemName" class="form-control" id="VoteItems_@(rowNo)_ItemName" aria-describedby="basic-addon@(rowNo)">
                         <span asp-validation-for="VoteItems[i].ItemName" class="text-danger"></span>
-                        @if(i == 2)
+                        @if (i == 2)
                         {
                             <div class="cls"></div>
                             <div class="input-group-append">
@@ -55,6 +55,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/jquery-datetimepicker/jquery.datetimepicker.full.min.js"></script>
+    <script type="text/javascript">
+        $("#datetimepicker").datetimepicker({
+            format: 'Y/m/d H:i',
+            step: 5
+        });
+    </script>
     <script>
         var optionCount = $("#init-count").attr("data-value");
         var voteItems = $("#VoteItems");

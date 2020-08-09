@@ -16,6 +16,9 @@ namespace VotingSystem.Web.Models
             VoteItems.Add(new CreateVoteItemCommand());
             VoteItems.Add(new CreateVoteItemCommand());
             VoteItems.Add(new CreateVoteItemCommand());
+
+            CreateTime = DateTimeOffset.Now; // 初始化为当前电脑时间
+            Deadline = DateTimeOffset.Now.AddDays(5);
         }
 
         public IList<CreateVoteItemCommand> VoteItems { get; set; } = new List<CreateVoteItemCommand>();
