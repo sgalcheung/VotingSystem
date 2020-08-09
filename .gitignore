@@ -6,4 +6,7 @@ appsettings.Production.json
 appsettings.Development.json
 *.log
 *.pubxml
-wwwroot/lib
+wwwroot
+!wwroot/css
+!wwroot/js
+!wwroot/favicon.ico
