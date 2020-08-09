@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace VotingSystem.Web.Entities
+namespace VotingSystem.Entities
 {
     public class Vote
     {

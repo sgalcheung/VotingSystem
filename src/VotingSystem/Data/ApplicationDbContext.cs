@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using VotingSystem.Web.Entities;
+using VotingSystem.Entities;
 
-namespace VotingSystem.Web.Data
+namespace VotingSystem.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
