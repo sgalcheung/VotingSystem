@@ -7,5 +7,6 @@ namespace VotingSystem.Entities
         public Guid Id { get; set; }
         public Guid VoteId { get; set; }
         public string ItemName { get; set; }
+        public long Count { get; set; }
     }
 }
