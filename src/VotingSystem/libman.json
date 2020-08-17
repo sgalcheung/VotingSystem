@@ -45,6 +45,11 @@
     {
       "library": "jquery-datetimepicker@2.5.20",
       "destination": "wwwroot/lib/jquery-datetimepicker/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "clipboard@2.0.6",
+      "destination": "wwwroot/lib/clipboard/"
     }
   ]
 }

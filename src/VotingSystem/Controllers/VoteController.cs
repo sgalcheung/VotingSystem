@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using QRCoder;
 using VotingSystem.Models;
 
 namespace VotingSystem.Controllers
@@ -97,7 +100,7 @@ namespace VotingSystem.Controllers
             catch (Exception)
             {
                 // Add a model-level error by using an empty string key
-                ModelState.AddModelError(string.Empty, "An error occured saving the recipe");
+                ModelState.AddModelError(string.Empty, "An error occured saving the vote");
             }
 
             // If we got to here, something went wrong
@@ -122,6 +125,51 @@ namespace VotingSystem.Controllers
             _voteService.DeleteVote(id);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Vote(Guid id)
+        {
+            var vote = _voteService.GetVoteToVote(id);
+
+            if (vote == null)
+            {
+                return NotFound();
+            }
+
+            return View(vote);
+        }
+
+        [HttpPost]
+        public IActionResult Vote(VoteCommand command)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _voteService.ToVote(command);
+                    return RedirectToAction(nameof(Vote), new { id = command.Id });
+                }
+            }
+            catch (Exception)
+            {
+                // Add a model-level error by using an empty string key
+                ModelState.AddModelError(string.Empty, "An error occured to vote");
+            }
+
+            // If we got to here, something went wrong
+            return RedirectToAction(nameof(Vote), new { id = command.Id });
+        }
+
+        public IActionResult GetShareQrCode(string plainText)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(plainText, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+            MemoryStream ms = new MemoryStream();
+            qrCodeImage.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            return File(ms.ToArray(), "image/jpeg");
         }
 
         private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);

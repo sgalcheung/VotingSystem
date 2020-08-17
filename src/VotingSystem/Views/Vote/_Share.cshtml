@@ -1,0 +1,122 @@
+﻿<style>
+    .container-fluid img {
+        border: 1px solid #d7d8d9;
+    }
+
+    .container-fluid span {
+        display: block;
+        width: 100%;
+        margin-bottom: 16px;
+        color: #333;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel">分享</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img data-src="/Vote/GetShareQrCode" id="imgQrcode" class="pull-left" alt="二维码" width="140" height="140">
+                        </div>
+                        <div class="col-md-8">
+                            <span class="pull-left strong" style="width:130px;">问卷链接与二维码</span>
+                            <div id="divCopyMsg" style="color: red; font-size: 14px;width:120px;padding-left:10px;" class="pull-left"></div>
+                            <span class="pull-left" style="margin-bottom: 0px;">
+                                <input type="text" id="shareUrl" class="link-input pull-left" style="width:250px;">
+                                <input id="d_clip_button" type="button" class="MP-button pull-left" value="复制" data-clipboard-action="copy" data-clipboard-target="#shareUrl">
+                                <a id="hrefOpenLink" target="_blank" class="link-btn white_boder pull-left">打开</a>
+                                <div class="bdsharebuttonbox bdshare-button-style0-24" style="float: left;" data-bd-bind="1597139633800">
+
+                                    <a href="#" class="bds_weixinnew pull-left" data-cmd="weixin" title="分享到微信"></a>
+
+                                    <a href="javascript:void(0)" class="bds_sqqnew pull-left" onclick="shareTo('qq')" title="分享到QQ好友"></a>
+                                    <a href="javascript:void(0)" class="bds_qzonenew pull-left" onclick="shareTo('qzone')" title="分享到QQ空间"></a>
+                                    <a href="javascript:void(0)" class="bds_tsinanew pull-left" onclick="shareTo('sina')" title="分享到新浪微博"></a>
+                                </div>
+
+                                <script type="text/javascript" src="~/lib/clipboard/dist/clipboard.min.js"></script>
+                                <script>
+                                    function shareTo(stype) {
+                                        var ftit = 'Hi%ef%bc%8c%e4%bd%a0%e5%a5%bd%ef%bc%8c%e8%bf%99%e6%98%af%e6%88%91%e5%9c%a8%e9%97%ae%e5%8d%b7%e6%98%9f%e4%b8%8a%e5%88%9b%e5%bb%ba%e7%9a%84%e6%8a%95%e7%a5%a8%ef%bc%8c%e7%82%b9%e5%87%bb%e7%bb%99%e5%80%99%e9%80%89%e4%ba%ba%e6%8a%95%e7%a5%a8%ef%bc%81';
+                                        var flink = 'http%3a%2f%2fwww.wjx.cn%2fimages%2fMasterNew%2fsojump_logo.png';
+                                        var lk = 'https%3a%2f%2ftp.wjx.top%2fjq%2f85416391.aspx';
+                                        var qTitle = '我';
+                                        //qq空间接口的传参
+                                        if (stype == 'qzone') {
+                                            window.open('https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + lk + '&title=' + qTitle + '&pics=' + flink + '&desc=' + ftit);
+                                        }
+                                        //新浪微博接口的传参
+                                        if (stype == 'sina') {
+                                            window.open('http://service.weibo.com/share/share.php?url=' + lk + '&title=' + ftit + '&pic=' + flink + '&appkey=');
+                                        }
+                                        //qq好友接口的传参
+                                        if (stype == 'qq') {
+                                            window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + lk + '&title=' + qTitle + '&pics=' + flink + '&desc=' + ftit);
+                                        }
+                                    }
+
+
+                                    var currentUrl = window.location.href;
+                                    var shareUrl = document.getElementById("shareUrl");
+                                    shareUrl.value = currentUrl;
+                                    var hrefOpenLink = document.getElementById("hrefOpenLink");
+                                    hrefOpenLink.href = currentUrl;
+
+                                    if (shareUrl.value.indexOf("http://") === 0 && window.location.protocol === "https:") {
+                                        shareUrl.value = shareUrl.value.replace("http://", "https://");
+                                        hrefOpenLink.href = hrefOpenLink.href.replace("http://", "https://");
+                                    }
+                                    var divCopyMsg = document.getElementById("divCopyMsg");
+                                    try {
+                                        var clipboard = new ClipboardJS('#d_clip_button');
+                                        clipboard.on('success', function (e) {
+                                            divCopyMsg.innerHTML = "复制成功";
+                                        });
+                                    } catch (ex) {
+                                        var d_clip_button = document.getElementById("d_clip_button");
+                                        d_clip_button.onclick = function () {
+                                            try {
+                                                window.clipboardData.setData("text", shareUrl.value);
+                                                divCopyMsg.innerHTML = "复制成功";
+                                            }
+                                            catch (ex) {
+                                                alert("复制失败，请手动复制！");
+                                                shareUrl.select();
+                                            }
+                                        }
+                                    }
+
+
+                                    var imgQrcode = document.getElementById("imgQrcode");
+                                    imgQrcode.setAttribute("data-src", imgQrcode.getAttribute("data-src") + "?plainText=" + currentUrl);
+                                </script>
+                            </span>
+                            <span class="pull-left">
+                                <a href="javascript:void(0)" onclick="PDF_launch('divlinkcode',620,260,null,'下载二维码')" ;="" class="link-btn white_boder_110  pull-left">下载二维码</a>
+
+                                <a href="/wjx/promote/sendweixin.aspx?activityid=85416391" class="link-btn white_boder_80 pull-left">分享微信</a>
+
+
+                                @*<a href="https://tp.wjx.top/joinnew/votewall.aspx?activity=85416391&amp;ts=1597048716&amp;sign=a1b260c2c1666468c63a1299fb9a048505a8d3a5" id="ctl02_ContentPlaceHolder1_hrefWall" class="link-btn white_boder_80 pull-left" target="_blank" onmouseenter="layer.tips('将投票墙进行投屏，实时展示投票结果，适用于现场投票等场景',this);" onmouseout="layer.closeAll('tips');">投票墙</a>*@
+
+                                @*<a href="javascript:void(0)" id="ctl02_ContentPlaceHolder1_hrefDomain" onclick="var d=new Date();var url='/register/changedomain.aspx?t='+d.valueOf();PDF_launch(url,636,430,null,'自定义域名');" class="a-aline-blue pull-right link_href_14" style="padding:25px 60px 0 0;">设置企业专属链接&gt;&gt;</a>*@
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

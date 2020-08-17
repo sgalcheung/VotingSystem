@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using VotingSystem.Data;
 using VotingSystem.Entities;
@@ -30,7 +31,7 @@ namespace VotingSystem
                 votes = votes.Where(x => x.Title == model.Title);
             }
 
-            var dateTime = DateTime.UtcNow;
+            var dateTime = DateTime.Now;
             var voteViewModels = votes.Select(x => new VoteViewModel
             {
                 Id = x.Id,
@@ -104,5 +105,39 @@ namespace VotingSystem
             _context.Votes.Remove(vote);
             _context.SaveChanges();
         }
-    } 
+
+        public VotePublicViewModel GetVoteToVote(Guid id)
+        {
+            var dateTime = DateTime.Now;
+            return _context.Votes
+                .Where(x => x.Id == id)
+                .Select(x => new VotePublicViewModel
+                {
+                    Title = x.Title,
+                    Remaining =
+                        $"{x.Deadline.Day - dateTime.Day}days {x.Deadline.Hour - dateTime.Hour}hrs {x.Deadline.Minute - dateTime.Minute}mins",
+                    IsMultiple = x.IsMultiple,
+                    VoteItems = x.VoteItems
+                        .Select(item => new VotePublicViewModel.Item
+                        {
+                            Id = item.Id,
+                            ItemName = item.ItemName,
+                            Count = item.Count,
+                            Percentage = item.Count == 0 ? "0%" :
+                                (item.Count / (decimal)x.VoteItems.Where(v => v.Count != 0).Sum(v => v.Count)).ToString("p"),
+                        })
+                })
+                .SingleOrDefault();
+        }
+
+        public void ToVote(VoteCommand command)
+        {
+            //var vote = _context.Votes.Find(command.Id);
+            var vote = _context.Votes.Include(v => v.VoteItems).Single(x => x.Id == command.Id);
+            if (vote == null) throw new Exception("Unable to find the vote");
+
+            command.ToVote(vote);
+            _context.SaveChanges();
+        }
+    }
 }

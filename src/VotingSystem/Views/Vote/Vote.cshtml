@@ -1,0 +1,107 @@
+﻿@model VotingSystem.Models.VotePublicViewModel
+
+@{
+    ViewBag.Title = "Vote";
+    Layout = "_Layout";
+}
+
+<h2>Vote</h2>
+
+<h4>@Model.Title</h4>
+<hr />
+
+@foreach (var item in Model.VoteItems)
+{
+    <div class="row">
+        <div class="col-md-5">
+            <div class="progress">
+                @*<input type="hidden" asp-for="@item.Id" />*@
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+            </div>
+        </div>
+    
+        @*<div class="col-md-5">
+        <div>选项</div>
+    </div>*@
+    
+        <div class="col-md-2">
+            <div>
+                @* 多选用checkbox，单选用radio *@
+                @if (Model.IsMultiple)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="voteItem" id="@item.Id">
+                        <label class="form-check-label" for="@item.Id">
+                            @item.ItemName
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="voteItem" id="@item.Id" value="@item.Id">
+                        <label class="form-check-label" for="@item.Id">
+                            @item.ItemName
+                        </label>
+                    </div>
+                }
+                @*<div class="form-check">
+                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input position-static" type="radio" name="blankRadio" id="blankRadio1" value="option1" aria-label="...">
+            </div>*@
+            </div>
+        </div>
+        <div class="col-md-5">
+            <span>@(item.Count)票</span>
+            <span>@item.Percentage</span>
+        </div>
+    </div>
+}
+
+<div>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <input type="hidden" asp-for="Id" />
+        <label class="btn btn-primary ">
+            <input type="radio" name="options" id="vote"> 投票
+        </label>
+        <label class="btn btn-info">
+            <input type="radio" name="options" data-toggle="modal" data-target="#shareModal"> 分享
+        </label>
+    </div>
+</div>
+
+<partial name="_Share" />
+
+@section Scripts {
+    <script>
+        let itemIdArray = [];
+
+        $("#vote").click(function() {
+            $('input[name="voteItem"]:checked').each(function() {
+                itemIdArray.push($(this).attr("id"));
+            });
+
+            var voteData = {
+                id: $("#Id").val(),
+                selectedItems: itemIdArray
+            }
+            
+            $.ajax({
+                url: "/Vote/Vote",
+                type: "POST",
+                data: voteData,
+            }).done(function(data) {
+                
+            }).fail(function(xhr) {
+                alert(xhr.responseText);
+            });
+        });
+
+        $('#shareModal').on('show.bs.modal',
+            function(event) {
+                $("#imgQrcode").attr("src", $("#imgQrcode").attr("data-src"));
+            });
+    </script>
+}
