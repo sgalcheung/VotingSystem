@@ -101,8 +101,11 @@ namespace VotingSystem
         public void DeleteVote(Guid id)
         {
             var vote = _context.Votes.Find(id);
+            if (vote.IsDelete) throw new Exception("Unable to delete a deleted vote");
 
-            _context.Votes.Remove(vote);
+            vote.IsDelete = true;
+
+            //_context.Votes.Remove(vote);
             _context.SaveChanges();
         }
 

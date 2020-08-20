@@ -12,5 +12,12 @@ namespace VotingSystem.Data
         }
 
         public DbSet<Vote> Votes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Vote>().HasQueryFilter(x => !x.IsDelete);
+        }
     }
 }
