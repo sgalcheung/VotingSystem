@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using VotingSystem.Models;
 
 namespace VotingSystem.Controllers
 {
+    [Authorize]
     public class VoteController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -60,7 +62,7 @@ namespace VotingSystem.Controllers
                 if (ModelState.IsValid)
                 {
                     var user = await GetCurrentUserAsync();
-                    var id = _voteService.CreateVote(command, /*user.Id*/"1");
+                    var id = _voteService.CreateVote(command, user.Id);
                     return RedirectToAction(nameof(Details), new { id = id });
                 }
             }
@@ -127,6 +129,7 @@ namespace VotingSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [AllowAnonymous]
         public IActionResult Vote(Guid id)
         {
             var vote = _voteService.GetVoteToVote(id);
@@ -139,7 +142,7 @@ namespace VotingSystem.Controllers
             return View(vote);
         }
 
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         public IActionResult Vote(VoteCommand command)
         {
             try
