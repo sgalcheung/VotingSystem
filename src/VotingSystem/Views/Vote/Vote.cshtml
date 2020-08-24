@@ -8,6 +8,50 @@
 <h2>Vote</h2>
 
 <h4>@Model.Title</h4>
+<div id="deadLine" data-value="@Model.Deadline"></div>
+<h5 id="deadLine_show"></h5>
+<script>
+    var deadLine = document.getElementById("deadLine");
+    var now = new Date();
+    //var end = new Date(2020, 9, 3, 16, 10, 00);//结束的时间：年，月，日，分，秒（月的索引是0~11）
+    var deadLineValue = deadLine.getAttribute("data-value");
+    var end = new Date(deadLineValue);
+    /*两个时间相减,得到的是毫秒ms,变成秒*/
+    var result = Math.floor(end - now) / 1000;
+    @* 页面加载同时渲染倒计时 *@
+    if (result > 1) {
+        var second = Math.floor(result % 60);     // 计算秒 ，取余
+        var minute = Math.floor((result / 60) % 60); //计算分 ，换算有多少分，取余，余出多少秒
+        var hour = Math.floor((result / 3600) % 24); //计算小时，换算有多少小时，取余，24小时制除以24，余出多少小时
+        var day = Math.floor(result / (3600 * 24));  //计算天 ，换算有多少天
+
+        var deadLineShow = document.getElementById("deadLine_show");
+        deadLineShow.innerHTML = (day + "天" + hour + "小时" + minute + "分" + second + "秒");
+    }
+
+
+    var interval = setInterval(sub, 1000); //定时器 调度对象
+    /*封装减1秒的函数*/
+    function sub() {
+        if (result > 1) {
+            result = result - 1;
+            var second = Math.floor(result % 60);     // 计算秒 ，取余
+            var minute = Math.floor((result / 60) % 60); //计算分 ，换算有多少分，取余，余出多少秒
+            var hour = Math.floor((result / 3600) % 24); //计算小时，换算有多少小时，取余，24小时制除以24，余出多少小时
+            var day = Math.floor(result / (3600 * 24));  //计算天 ，换算有多少天
+
+            var deadLineShow = document.getElementById("deadLine_show");
+            deadLineShow.innerHTML = (day + "天" + hour + "小时" + minute + "分" + second + "秒");
+        } else {
+            alert("投票截至倒计时结束！");
+            window.clearInterval(interval);//这里可以添加倒计时结束后需要执行的事件
+            var vote = document.getElementById("vote");
+            var share = document.getElementById("share");
+            vote.setAttribute("disabled", "disabled");
+            share.setAttribute("disabled", "disabled");
+        }
+    };
+</script>
 <hr />
 
 @foreach (var item in Model.VoteItems)
@@ -19,11 +63,11 @@
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
             </div>
         </div>
-    
+
         @*<div class="col-md-5">
-        <div>选项</div>
-    </div>*@
-    
+                <div>选项</div>
+            </div>*@
+
         <div class="col-md-2">
             <div>
                 @* 多选用checkbox，单选用radio *@
@@ -46,11 +90,11 @@
                     </div>
                 }
                 @*<div class="form-check">
-                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
-            </div>
-            <div class="form-check">
-                <input class="form-check-input position-static" type="radio" name="blankRadio" id="blankRadio1" value="option1" aria-label="...">
-            </div>*@
+                        <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input position-static" type="radio" name="blankRadio" id="blankRadio1" value="option1" aria-label="...">
+                    </div>*@
             </div>
         </div>
         <div class="col-md-5">
@@ -61,14 +105,10 @@
 }
 
 <div>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <div class="btn-group" role="group" aria-label="Vote">
         <input type="hidden" asp-for="Id" />
-        <label class="btn btn-primary ">
-            <input type="radio" name="options" id="vote"> 投票
-        </label>
-        <label class="btn btn-info">
-            <input type="radio" name="options" data-toggle="modal" data-target="#shareModal"> 分享
-        </label>
+        <button id="vote" type="button" class="btn btn-primary">投票</button>
+        <button id="share" type="button" class="btn btn-info" data-toggle="modal" data-target="#shareModal">分享</button>
     </div>
 </div>
 
@@ -76,10 +116,11 @@
 
 @section Scripts {
     <script>
+
         let itemIdArray = [];
 
-        $("#vote").click(function() {
-            $('input[name="voteItem"]:checked').each(function() {
+        $("#vote").click(function () {
+            $('input[name="voteItem"]:checked').each(function () {
                 itemIdArray.push($(this).attr("id"));
             });
 
@@ -87,20 +128,20 @@
                 id: $("#Id").val(),
                 selectedItems: itemIdArray
             }
-            
+
             $.ajax({
                 url: "/Vote/Vote",
                 type: "POST",
                 data: voteData,
-            }).done(function(data) {
-                
-            }).fail(function(xhr) {
+            }).done(function (data) {
+
+            }).fail(function (xhr) {
                 alert(xhr.responseText);
             });
         });
 
         $('#shareModal').on('show.bs.modal',
-            function(event) {
+            function (event) {
                 $("#imgQrcode").attr("src", $("#imgQrcode").attr("data-src"));
             });
     </script>

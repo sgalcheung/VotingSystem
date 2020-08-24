@@ -32,13 +32,16 @@ namespace VotingSystem
             }
 
             var dateTime = DateTime.Now;
-            var voteViewModels = votes.Select(x => new VoteViewModel
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Remaining =
-                    $"{x.Deadline.Day - dateTime.Day}days {x.Deadline.Hour - dateTime.Hour}hrs {x.Deadline.Minute - dateTime.Minute}mins"
-            });
+            var voteViewModels = votes
+                .Select(x => new VoteViewModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Remaining =
+                        $"{(x.Deadline - dateTime).Days}days " +
+                        $"{(x.Deadline - dateTime).Hours}hrs " +
+                        $"{(x.Deadline - dateTime).Minutes}minus"
+                });
 
             return PagedList<VoteViewModel>.CreateAsync(voteViewModels, model.PageNumber, model.PageSize);
         }
@@ -111,14 +114,12 @@ namespace VotingSystem
 
         public VotePublicViewModel GetVoteToVote(Guid id)
         {
-            var dateTime = DateTime.Now;
             return _context.Votes
                 .Where(x => x.Id == id)
                 .Select(x => new VotePublicViewModel
                 {
                     Title = x.Title,
-                    Remaining =
-                        $"{x.Deadline.Day - dateTime.Day}days {x.Deadline.Hour - dateTime.Hour}hrs {x.Deadline.Minute - dateTime.Minute}mins",
+                    Deadline = x.Deadline,
                     IsMultiple = x.IsMultiple,
                     VoteItems = x.VoteItems
                         .Select(item => new VotePublicViewModel.Item

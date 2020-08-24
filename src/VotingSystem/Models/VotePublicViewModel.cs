@@ -10,7 +10,7 @@ namespace VotingSystem.Models
         public Guid Id { get; set; }
         public string Title { get; set; }
         public int VoteCount { get; set; }
-        public string Remaining { get; set; }
+        public DateTimeOffset Deadline { get; set; }
         public bool IsMultiple { get; set; }
 
         public IEnumerable<Item> VoteItems { get; set; }
