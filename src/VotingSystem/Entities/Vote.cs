@@ -12,6 +12,7 @@ namespace VotingSystem.Entities
         public DateTimeOffset Deadline { get; set; }
         public bool IsMultiple { get; set; }
         public bool IsDelete { get; set; }
+        public bool IsPublish { get; set; }
 
         public ICollection<VoteItem> VoteItems { get; set; }
     }
