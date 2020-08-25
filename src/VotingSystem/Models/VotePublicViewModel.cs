@@ -12,6 +12,7 @@ namespace VotingSystem.Models
         public int VoteCount { get; set; }
         public DateTimeOffset Deadline { get; set; }
         public bool IsMultiple { get; set; }
+        public bool IsPublish { get; set; }
 
         public IEnumerable<Item> VoteItems { get; set; }
 

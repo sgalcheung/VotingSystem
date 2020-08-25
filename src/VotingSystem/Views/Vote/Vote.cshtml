@@ -104,13 +104,16 @@
     </div>
 }
 
-<div>
-    <div class="btn-group" role="group" aria-label="Vote">
-        <input type="hidden" asp-for="Id" />
-        <button id="vote" type="button" class="btn btn-primary">投票</button>
-        <button id="share" type="button" class="btn btn-info" data-toggle="modal" data-target="#shareModal">分享</button>
+@if (Model.IsPublish)
+{
+    <div>
+        <div class="btn-group" role="group" aria-label="Vote">
+            <input type="hidden" asp-for="Id" />
+            <button id="vote" type="button" class="btn btn-primary">投票</button>
+            <button id="share" type="button" class="btn btn-info" data-toggle="modal" data-target="#shareModal">分享</button>
+        </div>
     </div>
-</div>
+}
 
 <partial name="_Share" />
 

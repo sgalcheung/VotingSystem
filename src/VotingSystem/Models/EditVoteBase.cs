@@ -8,5 +8,6 @@ namespace VotingSystem.Models
         public DateTimeOffset CreateTime { get; set; }
         public DateTimeOffset Deadline { get; set; }
         public bool IsMultiple { get; set; }
+        public bool IsPublish { get; set; }
     }
 }

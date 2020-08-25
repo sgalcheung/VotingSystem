@@ -7,5 +7,6 @@ namespace VotingSystem.Models
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Remaining { get; set; }
+        public string IsPublish { get; set; }
     }
 }

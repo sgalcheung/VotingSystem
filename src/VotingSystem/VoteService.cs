@@ -40,7 +40,8 @@ namespace VotingSystem
                     Remaining =
                         $"{(x.Deadline - dateTime).Days}days " +
                         $"{(x.Deadline - dateTime).Hours}hrs " +
-                        $"{(x.Deadline - dateTime).Minutes}minus"
+                        $"{(x.Deadline - dateTime).Minutes}minus",
+                    IsPublish = x.IsPublish ? "已发布" : "未发布"
                 });
 
             return PagedList<VoteViewModel>.CreateAsync(voteViewModels, model.PageNumber, model.PageSize);
@@ -121,6 +122,7 @@ namespace VotingSystem
                     Title = x.Title,
                     Deadline = x.Deadline,
                     IsMultiple = x.IsMultiple,
+                    IsPublish = x.IsPublish,
                     VoteItems = x.VoteItems
                         .Select(item => new VotePublicViewModel.Item
                         {
@@ -141,6 +143,15 @@ namespace VotingSystem
             if (vote == null) throw new Exception("Unable to find the vote");
 
             command.ToVote(vote);
+            _context.SaveChanges();
+        }
+
+        public void Publish(Guid id)
+        {
+            var vote = _context.Votes.Find(id);
+            if (vote == null) throw new Exception("Unable to find the vote");
+
+            vote.IsPublish = true;
             _context.SaveChanges();
         }
     }

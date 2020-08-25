@@ -32,7 +32,8 @@ namespace VotingSystem.Models
                 Deadline = Deadline,
                 IsMultiple = IsMultiple,
                 VoteItems = VoteItems?.Select(x => x.ToVoteItem()).ToList(),
-                CreatedById = createById
+                CreatedById = createById,
+                IsPublish = IsPublish
             };
         }
     }

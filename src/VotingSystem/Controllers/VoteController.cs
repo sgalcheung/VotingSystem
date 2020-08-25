@@ -175,6 +175,14 @@ namespace VotingSystem.Controllers
             return File(ms.ToArray(), "image/jpeg");
         }
 
+        [HttpPost]
+        public IActionResult Publish(Guid id)
+        {
+            _voteService.Publish(id);
+
+            return Ok();
+        }
+
         private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);
     }
 }
