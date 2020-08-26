@@ -54,55 +54,71 @@
 </script>
 <hr />
 
-@foreach (var item in Model.VoteItems)
-{
-    <div class="row">
-        <div class="col-md-5">
-            <div class="progress">
-                @*<input type="hidden" asp-for="@item.Id" />*@
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+<div class="container">
+    @foreach (var item in Model.VoteItems)
+    {
+        <div class="row">
+            <div class="col-6 col-md-6">
+                <div class="progress">
+                    @*<input type="hidden" asp-for="@item.Id" />*@
+                    <div class="progress-bar progress-bar-striped progress-bar-animated
+                         @{
+                             var rate = decimal.Parse(item.Percentage.TrimEnd('%'));
+                             @((rate >= 20 && rate < 40) ? " bg-success " : "")
+                             @((rate >= 40 && rate < 60) ? " bg-info " : "")
+                             @((rate >= 60 && rate < 80) ? " bg-warning " : "")
+                             @((rate >= 80) ? " bg-danger " : "")
+                         }" 
+                         role="progressbar" aria-valuenow="@item.Percentage.TrimEnd('%')" aria-valuemin="0" aria-valuemax="100" style="width: @item.Percentage">
+                        @item.Percentage&nbsp;@(item.Count)
+                        @if (item.Count > 0)
+                        {
+                            @(item.Count>1? "polls":"poll")
+                        }
+                    </div>
+                </div>
             </div>
-        </div>
 
-        @*<div class="col-md-5">
-                <div>选项</div>
+            @*<div class="col-md-5">
+                    <div>选项</div>
+                </div>*@
+
+            <div class="col-6 col-md-6">
+                <div>
+                    @* 多选用checkbox，单选用radio *@
+                    @if (Model.IsMultiple)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="voteItem" id="@item.Id">
+                            <label class="form-check-label" for="@item.Id">
+                                @item.ItemName
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="voteItem" id="@item.Id" value="@item.Id">
+                            <label class="form-check-label" for="@item.Id">
+                                @item.ItemName
+                            </label>
+                        </div>
+                    }
+                    @*<div class="form-check">
+                            <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input position-static" type="radio" name="blankRadio" id="blankRadio1" value="option1" aria-label="...">
+                        </div>*@
+                </div>
+            </div>
+            @*<div class="col-3 col-md-3">
+                <span>@(item.Count)票</span>
+                <span>@item.Percentage</span>
             </div>*@
-
-        <div class="col-md-2">
-            <div>
-                @* 多选用checkbox，单选用radio *@
-                @if (Model.IsMultiple)
-                {
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="voteItem" id="@item.Id">
-                        <label class="form-check-label" for="@item.Id">
-                            @item.ItemName
-                        </label>
-                    </div>
-                }
-                else
-                {
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="voteItem" id="@item.Id" value="@item.Id">
-                        <label class="form-check-label" for="@item.Id">
-                            @item.ItemName
-                        </label>
-                    </div>
-                }
-                @*<div class="form-check">
-                        <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input position-static" type="radio" name="blankRadio" id="blankRadio1" value="option1" aria-label="...">
-                    </div>*@
-            </div>
         </div>
-        <div class="col-md-5">
-            <span>@(item.Count)票</span>
-            <span>@item.Percentage</span>
-        </div>
-    </div>
-}
+    }
+</div>
 
 @if (Model.IsPublish)
 {
