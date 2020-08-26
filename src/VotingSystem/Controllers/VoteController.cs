@@ -150,6 +150,7 @@ namespace VotingSystem.Controllers
                 if (ModelState.IsValid)
                 {
                     _voteService.ToVote(command);
+                    // 默认这个跳转并不会刷新，需要进一步研究，搜索“ASP.NET Core 中的响应缓存”，目前是由前端刷新
                     return RedirectToAction(nameof(Vote), new { id = command.Id });
                 }
             }
