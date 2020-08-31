@@ -155,7 +155,13 @@
             }).done(function (data) {
                 location.reload();
             }).fail(function (xhr) {
-                alert(xhr.responseText);
+                //alert(xhr.responseText);
+                if (xhr.status === 401) {
+                    var returnUrl = $(location).attr('pathname') + $(location).attr('search');
+                    $(location).attr('href', '/Identity/Account/Login?ReturnUrl=' + encodeURIComponent(returnUrl));
+                } else {
+                    alert(xhr.responseText);
+                }
             });
         });
 

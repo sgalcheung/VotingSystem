@@ -142,7 +142,7 @@ namespace VotingSystem.Controllers
             return View(vote);
         }
 
-        [HttpPost, AllowAnonymous]
+        [HttpPost]
         public IActionResult Vote(VoteCommand command)
         {
             try
