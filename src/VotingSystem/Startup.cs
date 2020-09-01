@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VotingSystem.Authorization;
 using VotingSystem.Data;
 using VotingSystem.Services;
 
@@ -33,6 +35,7 @@ namespace VotingSystem
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddScoped<VoteService>();
+            services.AddScoped<IAuthorizationHandler, IsVoteOwnerHandler>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -41,6 +44,14 @@ namespace VotingSystem
             {
                 microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
                 microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    "CanManageVote",
+                    policyBuilder => policyBuilder
+                        .AddRequirements(new IsVoteOwnerRequirement()));
             });
         }
 

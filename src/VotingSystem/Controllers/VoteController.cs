@@ -17,15 +17,18 @@ namespace VotingSystem.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly VoteService _voteService;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IAuthorizationService _authorizationService;
 
         public VoteController(
             ILogger<HomeController> logger, 
             VoteService voteService,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IAuthorizationService authorizationService)
         {
             _logger = logger;
             _voteService = voteService;
             _userManager = userManager;
+            _authorizationService = authorizationService;
         }
 
         public async Task<IActionResult> Index(SearchVoteModel model)
@@ -36,16 +39,20 @@ namespace VotingSystem.Controllers
             return View(models);
         }
 
-        public IActionResult Details(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
+            var vote = _voteService.GetVote(id);
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, vote, "CanManageVote");
+            if (!isAuthorized.Succeeded)
+            {
+                return new ForbidResult();
+            }
+
             var model = _voteService.GetVoteDetail(id);
             if (model == null)
             {
                 return NotFound();
             }
-
-            //var recipe = _voteService.GetVote(id);
-
 
             return View(model);
         }
@@ -75,9 +82,14 @@ namespace VotingSystem.Controllers
             return View(command);
         }
 
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            //var vote = _voteService.GetVote(id);
+            var vote = _voteService.GetVote(id);
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, vote, "CanManageVote");
+            if (!isAuthorized.Succeeded)
+            {
+                return new ForbidResult();
+            }
 
             var model = _voteService.GetVoteForUpdate(id);
 
@@ -90,10 +102,17 @@ namespace VotingSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(UpdateVoteCommand command)
+        public async Task<IActionResult> Edit(UpdateVoteCommand command)
         {
             try
             {
+                var vote = _voteService.GetVote(command.Id);
+                var isAuthorized = await _authorizationService.AuthorizeAsync(User, vote, "CanManageVote");
+                if (!isAuthorized.Succeeded)
+                {
+                    return new ForbidResult();
+                }
+
                 if (ModelState.IsValid)
                 {
                     _voteService.UpdateVote(command);
@@ -110,9 +129,14 @@ namespace VotingSystem.Controllers
             return View(command);
         }
 
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var vote = _voteService.GetVote(id);
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, vote, "CanManageVote");
+            if (!isAuthorized.Succeeded)
+            {
+                return new ForbidResult();
+            }
 
             if (vote == null)
             {
@@ -123,8 +147,15 @@ namespace VotingSystem.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            var vote = _voteService.GetVote(id);
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, vote, "CanManageVote");
+            if (!isAuthorized.Succeeded)
+            {
+                return new ForbidResult();
+            }
+
             _voteService.DeleteVote(id);
 
             return RedirectToAction(nameof(Index));
@@ -178,8 +209,20 @@ namespace VotingSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult Publish(Guid id)
+        public async Task<IActionResult> Publish(Guid id)
         {
+            var vote = _voteService.GetVote(id);
+            var isAuthorized = await _authorizationService.AuthorizeAsync(User, vote, "CanManageVote");
+            if (!isAuthorized.Succeeded)
+            {
+                return new ForbidResult();
+            }
+
+            if (vote == null)
+            {
+                return NotFound();
+            }
+
             _voteService.Publish(id);
 
             return Ok();
