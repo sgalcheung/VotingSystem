@@ -21,7 +21,7 @@ namespace VotingSystem
             _context = context;
         }
 
-        public Task<PagedList<VoteViewModel>> GetVotes(SearchVoteModel model)
+        public Task<PagedList<VoteViewModel>> GetVotes(SearchVoteModel model, string userId)
         {
             var votes = _context.Votes as IQueryable<Vote>;
 
@@ -33,6 +33,7 @@ namespace VotingSystem
 
             var dateTime = DateTime.Now;
             var voteViewModels = votes
+                .Where(x => x.CreatedById == userId)
                 .Select(x => new VoteViewModel
                 {
                     Id = x.Id,

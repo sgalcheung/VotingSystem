@@ -30,7 +30,8 @@ namespace VotingSystem.Controllers
 
         public async Task<IActionResult> Index(SearchVoteModel model)
         {
-            var models = await _voteService.GetVotes(model);
+            var user = await GetCurrentUserAsync();
+            var models = await _voteService.GetVotes(model, user.Id);
 
             return View(models);
         }
