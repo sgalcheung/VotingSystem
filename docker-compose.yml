@@ -1,0 +1,26 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: "3.4"
+
+services:
+  webapp:
+    image: sgalcheung/votingsystem
+    build:
+      context: .
+      dockerfile: src/VotingSystem/Dockerfile
+    ports:
+      - 8000:80
+    environment:
+      SendEmailUser: <-mail key->
+      SendEmailKey: <-mail password->
+      Authentication:Microsoft:ClientId: <-microsoft account clientId->
+      Authentication:Microsoft:ClientSecret: <-microsoft account clientSecret->
+    depends_on:
+      - db
+  db:
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - 1444:1433
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: <-mssql password->
