@@ -24,6 +24,7 @@
       "library": "font-awesome@5.14.0",
       "destination": "wwwroot/lib/font-awesome/",
       "files": [
+        "css/all.css",
         "css/all.min.css",
         "webfonts/fa-brands-400.eot",
         "webfonts/fa-brands-400.svg",
