@@ -35,7 +35,15 @@
       "enabled": false
     }
   },
-
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
   // js
   {
     "outputFileName": "wwwroot/js/all.min.js",
@@ -62,6 +70,16 @@
     ],
     "minify": {
       "enabled": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/site.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
     }
   }
 ]
