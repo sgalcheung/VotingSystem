@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using VotingSystem.Authorization;
 using VotingSystem.Data;
 using VotingSystem.Services;
@@ -62,7 +63,7 @@ namespace VotingSystem
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
@@ -78,6 +79,17 @@ namespace VotingSystem
                 //app.UseHsts();
             }
             //app.UseHttpsRedirection();
+            app.Use((context, next) =>
+            {
+
+                //context.Request.Scheme = "https";
+
+                //context.Request.IsHttps = true;
+                logger.LogInformation($"proto {context.Request.Scheme}");
+
+                return next();
+
+            });
             app.UseStaticFiles();
 
             app.UseRouting();
