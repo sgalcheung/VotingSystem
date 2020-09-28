@@ -82,10 +82,9 @@ namespace VotingSystem
             app.Use((context, next) =>
             {
 
-                //context.Request.Scheme = "https";
+                context.Request.Scheme = "https";
 
-                //context.Request.IsHttps = true;
-                logger.LogInformation($"proto {context.Request.Scheme}");
+                context.Request.IsHttps = true;
 
                 return next();
 
