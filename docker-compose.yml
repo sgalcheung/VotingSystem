@@ -15,6 +15,7 @@ services:
       SendEmailKey: <-mail password->
       Authentication:Microsoft:ClientId: <-microsoft account clientId->
       Authentication:Microsoft:ClientSecret: <-microsoft account clientSecret->
+      ConnectionStrings:DefaultConnection: <-connection strings->
     depends_on:
       - db
   db:
