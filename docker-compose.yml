@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: src/VotingSystem/Dockerfile
     ports:
-      - 8000:80
+      - 5000
     environment:
       SendEmailUser: <-mail key->
       SendEmailKey: <-mail password->
