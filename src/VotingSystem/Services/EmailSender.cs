@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -14,7 +15,7 @@ namespace VotingSystem.Services
         }
 
         public AuthMessageSenderOptions Options { get; } // set only via Secret Manger
-        private const string SENDEMAIL = "sgalwork@outlook.com";
+        private const string SENDEMAIL = "1358580960@qq.com";
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
@@ -34,7 +35,7 @@ namespace VotingSystem.Services
 
             using (var client = new SmtpClient())
             {
-                client.Connect("smtp.office365.com", 587, false);
+                client.Connect("smtp.qq.com", 587, SecureSocketOptions.None);
                 client.Authenticate(SENDEMAIL, Options.SendEmailKey);
 
                 client.Send(message);
