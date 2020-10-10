@@ -1,8 +1,7 @@
 # 投票管理系统
 
-
-
-
+[![Build Status](https://dev.azure.com/sgalwork/VotingSystem/_apis/build/status/VotingSystem-Docker%20container-CI?branchName=master)](https://dev.azure.com/sgalwork/VotingSystem/_build/latest?definitionId=4&branchName=master)
+[![Issues](https://img.shields.io/github/issues/sgalcheung/VotingSystem.svg)](https://github.com/sgalcheung/VotingSystem/issues)
 
 ## 业务介绍
 
@@ -24,3 +23,5 @@
 VoteService作为一个简单的领域服务，来处理业务逻辑，以保持Controller的简洁
 
 ## 部署
+
+采用DevOps，使用 [Azure Pipelines](https://azure.microsoft.com/zh-cn/services/devops/pipelines/) 实现CI/CD自动化集成和持续交付(或部署)
