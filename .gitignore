@@ -8,3 +8,7 @@ appsettings.Development.json
 *.pubxml
 **/wwwroot/lib
 docker-compose.debug.yml
+
+# JetBrains Rider
+.idea/
+
