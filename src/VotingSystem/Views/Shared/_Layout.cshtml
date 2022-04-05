@@ -10,11 +10,7 @@
         <link asp-href-include="css/*" asp-href-exclude="css/*.min.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
-        @* <link asp-href-include="css/all.min.css" rel="stylesheet" /> *@
-        <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet">
-        <link href="https://cdn.bootcdn.net/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" rel="stylesheet">
-        <link href="~/css/site.min.css" rel="stylesheet" />
+        <link href="~/css/all.min.css" rel="stylesheet" />
     </environment>
 </head>
 <body>
@@ -58,12 +54,7 @@
     <script asp-src-include="js/*" asp-src-exclude="js/*.min.js"></script>
 </environment>
 <environment exclude="Development">
-    @* <script asp-src-include="js/all.min.js"></script> *@
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
-    <script src="~/js/site.min.js"></script>
+    <script src="~/js/all.min.js"></script>
 </environment>
     @RenderSection("Scripts", required: false)
 </body>

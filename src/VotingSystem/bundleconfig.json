@@ -5,6 +5,7 @@
     "inputFiles": [
       "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
       "wwwroot/lib/font-awesome/css/all.css",
+      "wwwroot/lib/jquery-datetimepicker/jquery.datetimepicker.css",
       "wwwroot/css/site.css"
     ]
   },
