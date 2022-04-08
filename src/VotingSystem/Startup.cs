@@ -35,7 +35,7 @@ namespace VotingSystem
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<IEmailSender, EmailSender>();
-            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.Configure<EmailSenderOptions>(Configuration.GetSection(EmailSenderOptions.EmailSender));
 
             services.AddScoped<VoteService>();
             services.AddScoped<IAuthorizationHandler, IsVoteOwnerHandler>();

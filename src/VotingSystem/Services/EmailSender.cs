@@ -9,24 +9,25 @@ namespace VotingSystem.Services
 {
     public class EmailSender : IEmailSender
     {
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+        public EmailSender(IOptions<EmailSenderOptions> optionsAccessor)
         {
             Options = optionsAccessor.Value;
         }
 
-        public AuthMessageSenderOptions Options { get; } // set only via Secret Manger
-        private const string SENDEMAIL = "1358580960@qq.com";
+        public EmailSenderOptions Options { get; }
+        private const string FromDisplayName = "Voting Notification";
+        private const string TargetSubject = "New notifications in kahla";
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            return Execute(Options.SendEmailKey, subject, htmlMessage, email);
+            return Execute(subject, htmlMessage, email);
         }
 
-        private Task Execute(string apiKey, string subject, string htmlMessage, string email)
+        private Task Execute(string subject, string htmlMessage, string email)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(Options.SendEmailUser, SENDEMAIL));
-            message.To.Add(new MailboxAddress("", email));
+            message.From.Add(new MailboxAddress(FromDisplayName, Options.MailUser));
+            message.To.Add(new MailboxAddress(TargetSubject, email));
             message.Subject = subject;
             var builder = new BodyBuilder();
             builder.TextBody = htmlMessage;
@@ -35,8 +36,8 @@ namespace VotingSystem.Services
 
             using (var client = new SmtpClient())
             {
-                client.Connect("smtp.qq.com", 587, SecureSocketOptions.None);
-                client.Authenticate(SENDEMAIL, Options.SendEmailKey);
+                client.Connect(Options.MailServer, 587, SecureSocketOptions.None);
+                client.Authenticate(Options.MailUser, Options.MailPassword);
 
                 client.Send(message);
                 client.Disconnect(true);
