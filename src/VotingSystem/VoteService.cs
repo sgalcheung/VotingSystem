@@ -116,7 +116,7 @@ namespace VotingSystem
 
         public VotePublicViewModel GetVoteToVote(Guid id)
         {
-            return _context.Votes
+            var result = _context.Votes
                 .Where(x => x.Id == id)
                 .Select(x => new VotePublicViewModel
                 {
@@ -130,11 +130,24 @@ namespace VotingSystem
                             Id = item.Id,
                             ItemName = item.ItemName,
                             Count = item.Count,
-                            Percentage = item.Count == 0 ? "0%" :
-                                (item.Count / (decimal)x.VoteItems.Where(v => v.Count != 0).Sum(v => v.Count)).ToString("p"),
+                            // notice: not supported sqlite
+                            // Percentage = item.Count == 0 ? "0%" :
+                            //     (item.Count / (decimal)x.VoteItems.Where(v => v.Count != 0).Sum(v => v.Count)).ToString("p"),
                         })
                 })
                 .SingleOrDefault();
+
+            if (result != null)
+            {
+                foreach (var item in result.VoteItems)
+                {
+                    item.Percentage = item.Count == 0
+                        ? "0%"
+                        : (item.Count / (decimal) result.VoteItems.Where(v => v.Count != 0).Sum(v => v.Count)).ToString("p");
+                }
+            }
+
+            return result;
         }
 
         public void ToVote(VoteCommand command)

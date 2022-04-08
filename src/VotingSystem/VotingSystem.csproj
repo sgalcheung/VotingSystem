@@ -24,8 +24,4 @@
     <PackageReference Include="QRCoder" Version="1.3.9" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Migrations" />
-  </ItemGroup>
-
 </Project>

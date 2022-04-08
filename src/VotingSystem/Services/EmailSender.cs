@@ -15,8 +15,8 @@ namespace VotingSystem.Services
         }
 
         public EmailSenderOptions Options { get; }
-        private const string FromDisplayName = "Voting Notification";
-        private const string TargetSubject = "New notifications in kahla";
+        private const string FromDisplayName = "Voting System Notification";
+        private const string TargetSubject = "New notifications in voting system";
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
